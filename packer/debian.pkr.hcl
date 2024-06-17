@@ -4,6 +4,11 @@ packer {
       version = "~> 1"
       source  = "github.com/hashicorp/virtualbox"
     }
+
+    vagrant = {
+      version = "~> 1"
+      source  = "github.com/hashicorp/vagrant"
+    }
   }
 }
 
@@ -55,5 +60,10 @@ build {
     inline = [
       "sudo apt install --assume-yes python3 python3-pip"
     ]
+  }
+
+  post-processor "vagrant" {
+    keep_input_artifact = true
+    provider_override   = "virtualbox"
   }
 }
