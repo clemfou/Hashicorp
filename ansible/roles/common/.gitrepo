@@ -1,0 +1,12 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/ingydotnet/git-subrepo#readme
+;
+[subrepo]
+	remote = git@github.com:clemfou/AnsibleCommon.git
+	branch = main
+	commit = ce8b736e21e0e21ade954bd5a389a822632df3ef
+	parent = c002bc5c84e3d8bcbfa897b30122ba43aab174e5
+	method = merge
+	cmdver = 0.4.6

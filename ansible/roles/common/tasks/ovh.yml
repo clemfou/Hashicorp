@@ -1,0 +1,9 @@
+---
+
+- name: Purge leftover OVH configuration
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: absent
+  loop:
+    - /etc/ssh/sshd_config.d/50-cloud-init.conf
+    - /etc/sudoers.d/90-cloud-init-users

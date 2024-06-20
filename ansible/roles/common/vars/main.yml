@@ -1,0 +1,11 @@
+---
+
+admin_users:
+  clemfou:
+    passwd_hash: "{{ vault_clemfou_user_passwd }}"
+    public_keys: >
+      ssh-ed25519
+      AAAAC3NzaC1lZDI1NTE5AAAAIA0EyI16k5RfrAGejTfFnLP/T+XxxFBKPRjneQyQccHT
+
+      ssh-ed25519
+      AAAAC3NzaC1lZDI1NTE5AAAAIBJ7e33ip0fvLdb41RzQBlmm5uF1476uS1rF+tG9PiNP

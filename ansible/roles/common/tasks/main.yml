@@ -1,0 +1,27 @@
+---
+
+- name: Install some packages
+  ansible.builtin.include_tasks:
+      file: packages.yml
+
+- name: User configuration
+  ansible.builtin.include_tasks:
+    file: users.yml
+
+- name: Include tasks related to Packer image build
+  ansible.builtin.include_tasks:
+    file: packer.yml
+  when:
+    - ansible_nodename is search("packer")
+    - ansible_virtualization_type == "virtualbox"
+
+- name: Include OVH-specific tasks
+  ansible.builtin.include_tasks:
+    file: ovh.yml
+  when: ansible_facts['domain'] == "vpss.ovh.net"
+
+- name: Server configuration
+  ansible.builtin.include_tasks:
+    file: configure.yml
+
+- ansible.builtin.meta: flush_handlers

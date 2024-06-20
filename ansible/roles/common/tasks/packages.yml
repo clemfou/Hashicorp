@@ -1,0 +1,13 @@
+---
+
+- name: Install common packages
+  ansible.builtin.package:
+    name:
+      - atool
+      - curl
+      - sudo
+      - tmux
+      - tree
+      - vim
+      - wget
+    state: present

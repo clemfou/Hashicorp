@@ -1,0 +1,51 @@
+---
+
+- name: Configure unattended-upgrades
+  block:
+    - name: Ensure unattended-upgrades is installed
+      ansible.builtin.package:
+        name:
+          - unattended-upgrades
+        state: present
+
+    - name: Generate unattended-upgrades configuration
+      ansible.builtin.template:
+        src: "apt/apt.conf.d/{{ item }}.j2"
+        dest: "/etc/apt/apt.conf.d/{{ item }}"
+      loop:
+        - 20auto-upgrades
+        - 50unattended-upgrades
+  # Unnecessary for my lab
+  when:
+    - not ansible_nodename is search("packer")
+    - not ansible_virtualization_type == "virtualbox"
+
+- name: Configure apt
+  block:
+    - name: Generate apt local preference
+      ansible.builtin.template:
+        src: "apt/preferences.d/{{ item }}.j2"
+        dest: "/etc/apt/preferences.d/{{ item }}"
+      loop:
+        - pinning.pref
+
+    - name: Generate sources.list files
+      ansible.builtin.template:
+        src: "apt/sources.list.d/{{ item }}.j2"
+        dest: "/etc/apt/sources.list.d/{{ item }}"
+      loop:
+        - testing.list
+        - unstable.list
+
+    - name: Ensure the package cache is up to date
+      ansible.builtin.apt:
+        update_cache: yes
+  when: ansible_facts['distribution'] == "Debian"
+
+- name: Generate sshd configuration
+  ansible.builtin.template:
+    src: "ssh/{{ item }}.j2"
+    dest: "/etc/ssh/{{ item }}"
+  loop:
+    - sshd_config
+  notify: reload_sshd

@@ -1,0 +1,42 @@
+---
+
+- name: Create a group for users authorized to ssh
+  ansible.builtin.group:
+    name: ssh_authorized
+    state: present
+
+- name: Configure the ansible-admin account
+  block:
+    - ansible.builtin.user:
+        name: ansible-admin
+        state: present
+        shell: /bin/bash
+        uid: 1000
+        password: "{{ vault_ansible_user_passwd }}"
+        groups: sudo,ssh_authorized
+        append: true
+      when: not ansible_check_mode
+
+    - ansible.posix.authorized_key:
+        user: ansible-admin
+        state: present
+        key: "{{ item.value.public_keys }}"
+      loop: "{{ admin_users | dict2items }}"
+
+- name: Add server admin users
+  ansible.builtin.user:
+    name: "{{ item.key }}"
+    state: present
+    shell: /bin/bash
+    password: "{{ item.value.passwd_hash }}"
+    groups: sudo,ssh_authorized
+    append: true
+  loop: "{{ admin_users | dict2items }}"
+  when: not ansible_check_mode
+
+- name: Add admin users ssh keys
+  ansible.posix.authorized_key:
+    user: "{{ item.key }}"
+    state: present
+    key: "{{ item.value.public_keys }}"
+  loop: "{{ admin_users | dict2items }}"

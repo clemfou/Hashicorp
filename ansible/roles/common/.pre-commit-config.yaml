@@ -1,0 +1,11 @@
+---
+repos:
+- repo: https://github.com/clemfou/PreCommitHooks
+  rev: v1.0.2
+  hooks:
+    - id: generic-check-for-binary-files
+    - id: generic-fix-end-of-files
+    - id: generic-non-breaking-spaces
+    - id: generic-replace-tabs-with-spaces
+      args: [--shiftwidth=4]
+    - id: generic-trailing-whitespaces

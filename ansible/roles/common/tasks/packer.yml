@@ -1,0 +1,17 @@
+---
+
+- name: Ensure that a SSH key has been especially created for Vagrant
+  block:
+    - ansible.builtin.command: ssh-keygen -t ed25519 -q -f ~/.ssh/vagrant -C "" -N ""
+      args:
+        creates: ~/.ssh/vagrant
+
+  delegate_to: localhost
+  become: false
+  run_once: true
+
+- name: Add SSH key generated for Vagrant
+  ansible.posix.authorized_key:
+    user: ansible-admin
+    state: present
+    key: "{{ lookup('file', lookup('env','HOME') + '/.ssh/vagrant.pub') }}"
