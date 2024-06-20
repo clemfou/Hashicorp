@@ -9,6 +9,11 @@ packer {
       version = "~> 1"
       source  = "github.com/hashicorp/vagrant"
     }
+
+    ansible = {
+      version = "~> 1"
+      source  = "github.com/hashicorp/ansible"
+    }
   }
 }
 
@@ -59,6 +64,18 @@ build {
   provisioner "shell" {
     inline = [
       "sudo apt install --assume-yes python3 python3-pip"
+    ]
+  }
+  provisioner "ansible" {
+    inventory_directory = "../ansible/inventories/packer"
+    playbook_file       = "provisioner.yml"
+    ansible_env_vars = [
+      "ANSIBLE_CONFIG=../ansible/ansible.cfg",
+      "ANSIBLE_VAULT_PASSWORD_FILE=../ansible/vault.key"
+    ]
+
+    extra_arguments = [
+      "--extra-vars", "@../vault.yml"
     ]
   }
 

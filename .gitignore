@@ -1,2 +1,4 @@
 *.box
+ansible/vault.key
 packer/output*
+vault.yml
