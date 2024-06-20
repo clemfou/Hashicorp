@@ -45,8 +45,8 @@ source "virtualbox-iso" "debian" {
   vboxmanage = [
     ["modifyvm", "{{.Name}}", "--nat-localhostreachable1", "on"],
   ]
-  ssh_username     = "vagrant"
-  ssh_password     = "vagrant"
+  ssh_username     = "ansible-admin"
+  ssh_password     = "ansible-admin"
   ssh_timeout      = "20m"
   shutdown_command = "sudo shutdown --poweroff now"
 }
