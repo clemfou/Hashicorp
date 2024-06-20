@@ -40,7 +40,7 @@ source "virtualbox-iso" "debian" {
     "debconf/frontend=noninteractive <wait>",
     "console-setup/ask_detect=false <wait>",
     "console-keymaps-at/keymap=fr <wait>",
-    "keyboard-configuration/xkb-keymap=fr <enter>"
+    "keyboard-configuration/xkb-keymap=fr-latin9 <enter>"
   ]
   vboxmanage = [
     ["modifyvm", "{{.Name}}", "--nat-localhostreachable1", "on"],
