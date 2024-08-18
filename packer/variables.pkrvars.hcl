@@ -1,1 +1,1 @@
-debian_version = "12.5.0"
+debian_version = "12.6.0"
