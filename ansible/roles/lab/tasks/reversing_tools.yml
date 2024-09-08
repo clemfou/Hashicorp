@@ -1,0 +1,76 @@
+---
+
+- name: Install some reversing tools
+  ansible.builtin.package:
+    name:
+      - binwalk
+      - gdb
+      - strace
+  become: true
+
+- name: Install gdb-dashboard
+  ansible.builtin.get_url:
+    url: https://raw.githubusercontent.com/cyrus-and/gdb-dashboard/master/.gdbinit
+    dest: /home/vagrant/.gdbinit
+    owner: vagrant
+    group: vagrant
+
+- name: Install pwntools
+  ansible.builtin.pip:
+    name: pwntools
+    virtualenv: /home/vagrant/.virtualenvs/pwntools
+    virtualenv_command: /home/vagrant/.local/bin/virtualenv
+  become: false
+
+- name: Install pyenv
+  block:
+    - name: Clone repository
+      ansible.builtin.git:
+        repo: https://github.com/pyenv/pyenv.git
+        dest: /home/vagrant/.pyenv
+        depth: 1
+        single_branch: true
+        version: master
+
+    - name: Clone pyenv plugins
+      ansible.builtin.git:
+        repo: "https://github.com/pyenv/{{ item }}.git"
+        dest: "/home/vagrant/.pyenv/plugins/{{ item }}"
+        depth: 1
+        single_branch: true
+        version: master
+      loop:
+        - pyenv-doctor
+        - pyenv-update
+        - pyenv-virtualenv
+
+- name: Install radare2 from Git
+  block:
+    - name: Cloning radare2 repository
+      ansible.builtin.git:
+        repo: https://github.com/radareorg/radare2
+        dest: /home/vagrant/git/radare2
+
+    - name: Configure radare2
+      ansible.builtin.shell:
+        ./configure --prefix=/home/vagrant/.local --with-rpath
+      args:
+        chdir: /home/vagrant/git/radare2
+
+    - name: Build radare2
+      community.general.make:
+        chdir: /home/vagrant/git/radare2
+
+    - name: Install radare2
+      community.general.make:
+        chdir: /home/vagrant/git/radare2
+        target: install
+
+    - name: Install r2ghidra plugin
+      ansible.builtin.shell: |
+        r2pm -U
+        r2pm -ci r2ghidra
+      environment:
+        PATH: "/home/vagrant/.local/bin:{{ ansible_env.PATH }}"
+  become: yes
+  become_user: vagrant

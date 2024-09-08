@@ -1,0 +1,6 @@
+---
+
+- ansible.builtin.include_tasks: configure.yml
+
+- name: Install some reversing tools
+  ansible.builtin.import_tasks: reversing_tools.yml

@@ -1,0 +1,51 @@
+---
+
+- name: Install some packages
+  block:
+    - ansible.builtin.package:
+        name:
+          - binutils
+          - build-essential
+          - git
+          - pipx
+          - pkg-config
+          - rxvt-unicode
+
+    - name: Install Openbox
+      ansible.builtin.package:
+        name:
+          - obconf
+          - openbox
+          - xinit
+  become: true
+
+- name: Install some python dependencies
+  block:
+    - community.general.pipx:
+        name: virtualenv
+
+    - ansible.builtin.pip:
+        name: Pygments
+        break_system_packages: true
+  become_user: vagrant
+
+- name: Create some directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: vagrant
+    group: vagrant
+  loop:
+    - /home/vagrant/git
+
+- name: Copy some basic dotfiles
+  ansible.builtin.template:
+    src: "{{ item }}.j2"
+    dest: "/home/vagrant/{{ item }}"
+    owner: vagrant
+    group: vagrant
+    mode: 0770
+  loop:
+    - .bashrc
+    - .profile
+    - .xinitrc
