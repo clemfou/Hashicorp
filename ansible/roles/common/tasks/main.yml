@@ -24,4 +24,8 @@
   ansible.builtin.include_tasks:
     file: configure.yml
 
-- ansible.builtin.meta: flush_handlers
+- name: Flushing ansible handlers
+  ansible.builtin.meta: flush_handlers
+
+- name: Reset SSH connection
+  ansible.builtin.meta: reset_connection

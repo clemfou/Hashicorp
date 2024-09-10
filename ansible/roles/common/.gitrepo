@@ -6,7 +6,7 @@
 [subrepo]
 	remote = git@github.com:clemfou/AnsibleCommon.git
 	branch = main
-	commit = ca0134d5d1d85cd999e23d5895780dab1f086c36
-	parent = 2ea9f14f51c9f9a750e5dc3c3dcf8d56dd1f1d6e
+	commit = 2680a6770ce12c727c58611fea9c7aa7a63bd0a6
+	parent = 476ded1abcd066b91bfb865a6ea6069d806912ae
 	method = merge
 	cmdver = 0.4.9

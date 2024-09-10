@@ -19,14 +19,6 @@
     append: true
   when: not ansible_check_mode
 
-- name: Allow vagrant user to execute any command without password
-  community.general.sudoers:
-    name: vagrant
-    user: vagrant
-    state: present
-    commands: ALL
-    nopassword: true
-
 - name: Add SSH key generated for Vagrant
   ansible.posix.authorized_key:
     user: vagrant
